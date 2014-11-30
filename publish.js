@@ -256,8 +256,6 @@ function buildNav(members) {
         }
     }
 
-    console.log(members);
-
     return nav;
 }
 
