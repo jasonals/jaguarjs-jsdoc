@@ -199,10 +199,10 @@ function attachModuleSymbols(doclets, modules) {
 function buildNav(members) {
     var nav = [];
 
-    if (members.namespaces.length) {
-        _.each(members.namespaces, function (v) {
+    var build = function(m) {
+        _.each(members[m], function (v) {
             nav.push({
-                type: 'namespace',
+                type: m,
                 longname: v.longname,
                 name: v.name,
                 members: find({
@@ -223,33 +223,40 @@ function buildNav(members) {
                 })
             });
         });
+    };
+    var buildWithScope = function(m) {
+        nav.push({
+            type: 'namespace',
+            longname: m,
+            name: m,
+            members: find({
+                kind: 'member',
+                scope: m
+            }),
+            methods: find({
+                kind: 'function',
+                scope: m
+            }),
+            typedefs: find({
+                kind: 'typedef',
+                scope: m
+            }),
+            events: find({
+                kind: 'event',
+                scope: m
+            })
+        });
+    };
+
+    for (var m in members) {
+        if (m === 'namespaces') {
+            build(m);
+        } else if(members[m].length) {
+            buildWithScope(members[m][0].scope);
+        }
     }
 
-    if (members.classes.length) {
-        _.each(members.classes, function (v) {
-            nav.push({
-                type: 'class',
-                longname: v.longname,
-                name: v.name,
-                members: find({
-                    kind: 'member',
-                    memberof: v.longname
-                }),
-                methods: find({
-                    kind: 'function',
-                    memberof: v.longname
-                }),
-                typedefs: find({
-                    kind: 'typedef',
-                    memberof: v.longname
-                }),
-                events: find({
-                    kind: 'event',
-                    memberof: v.longname
-                })
-            });
-        });
-    }
+    console.log(members);
 
     return nav;
 }
