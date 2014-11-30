@@ -35,9 +35,9 @@ $(function () {
 
     if ($currentItem.length) {
         $currentItem
-            .remove()
-            .prependTo('.navigation .list')
-            .show()
+            // .remove()
+            // .prependTo('.navigation .list')
+            // .show()
             .find('.itemMembers')
                 .show();
     }
