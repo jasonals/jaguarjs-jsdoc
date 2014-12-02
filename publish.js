@@ -252,7 +252,9 @@ function buildNav(members) {
         if (m === 'namespaces') {
             build(m);
         } else if(members[m].length) {
-            buildWithScope(members[m][0].scope);
+            members[m].forEach(function(mm) {            
+                if (!mm.memberof) buildWithScope(mm.scope);
+            })
         }
     }
 
